@@ -1,12 +1,16 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
+import { useDispatch } from '../../services/store';
+import { loginUserThunk } from '../../features/user/userSlice';
 
 export const Login: FC = () => {
+  const dispath = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    dispath(loginUserThunk({ email: email, password: password }));
   };
 
   return (

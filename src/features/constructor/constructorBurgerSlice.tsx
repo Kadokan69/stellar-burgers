@@ -19,8 +19,6 @@ const initialState: TConstructorBurger = {
   error: null
 };
 
-console.log(localStorage.getItem('bun'));
-
 const constructorBurgerSlice = createSlice({
   name: 'constructorBurger',
   initialState,
@@ -41,6 +39,38 @@ const constructorBurgerSlice = createSlice({
           JSON.stringify(state.burgerConstructor.ingredients)
         );
       }
+    },
+    removeIngredient: (state, action) => {
+      state.burgerConstructor.ingredients.splice(action.payload, 1);
+      localStorage.setItem(
+        'ingredients',
+        JSON.stringify(state.burgerConstructor.ingredients)
+      );
+    },
+    moveIngredientDown: (state, action) => {
+      state.burgerConstructor.ingredients.splice(action.payload.index, 1);
+      state.burgerConstructor.ingredients.splice(
+        action.payload.index + 1,
+        0,
+        action.payload.ingredient
+      );
+      localStorage.setItem(
+        'ingredients',
+        JSON.stringify(state.burgerConstructor.ingredients)
+      );
+    },
+    moveIngredientUp: (state, action) => {
+      state.burgerConstructor.ingredients.splice(action.payload.index, 1);
+      state.burgerConstructor.ingredients.splice(
+        action.payload.index - 1,
+        0,
+        action.payload.ingredient
+      );
+
+      localStorage.setItem(
+        'ingredients',
+        JSON.stringify(state.burgerConstructor.ingredients)
+      );
     }
   },
   selectors: {
@@ -49,7 +79,12 @@ const constructorBurgerSlice = createSlice({
   }
 });
 
-export const { addIngredient } = constructorBurgerSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  moveIngredientDown,
+  moveIngredientUp
+} = constructorBurgerSlice.actions;
 export const { getConstructorBurgerIngredient, getConstructorBurgerState } =
   constructorBurgerSlice.selectors;
 export default constructorBurgerSlice.reducer;

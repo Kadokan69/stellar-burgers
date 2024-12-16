@@ -1,7 +1,19 @@
 import React from 'react';
+import { Outlet, Navigate } from 'react-router-dom';
+import { useSelector } from '../../services/store';
+import { Preloader } from '@ui';
 
-type ProtectedRouteProps = {
-  children: React.ReactElement;
+export const ProtectedRoute = () => {
+  const { user, isInit, isLoading, userLogin } = useSelector(
+    (store) => store.user
+  );
+  if (!isInit || isLoading) {
+    return <Preloader />;
+  }
+
+  if (!userLogin) {
+    return <Navigate to='/login' />;
+  }
+
+  return <Outlet />;
 };
-
-export const ProtectedRoute = ({ children }: ProtectedRouteProps) => children;
