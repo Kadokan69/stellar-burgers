@@ -18,14 +18,14 @@ export const registerUserThunk = createAsyncThunk(
   async (user: TRegisterData) => registerUserApi(user)
 );
 
-export const loginUserThunk = createAsyncThunk(
-  'user/loginUserThunk',
-  async (user: TLoginData) =>
-    loginUserApi(user).then((res) => {
-      setCookie('accessToken', res.accessToken);
-      localStorage.setItem('refreshToken', res.refreshToken);
-    })
-);
+// export const loginUserThunk = createAsyncThunk(
+//   'user/loginUserThunk',
+//   async (user: TLoginData) =>
+//     loginUserApi(user).then((res) => {
+//       setCookie('accessToken', res.accessToken);
+//       localStorage.setItem('refreshToken', res.refreshToken);
+//     })
+// );
 
 export const getUserThunk = createAsyncThunk('user/getUserThunk', async () =>
   getUserApi()

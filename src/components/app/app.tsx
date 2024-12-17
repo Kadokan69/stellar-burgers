@@ -26,6 +26,7 @@ import { useEffect } from 'react';
 import { fetchIngredientsData } from '../../features/ingredient/ingredientsSlice';
 import { fetchFeedData } from '../../features/feed/feedSlice';
 import { getUserThunk } from '../../features/user/userSlice';
+import { getCookie } from '../../utils/cookie';
 
 const App = () => {
   const navigate = useNavigate();
@@ -34,7 +35,9 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchIngredientsData());
     dispatch(fetchFeedData());
-    dispatch(getUserThunk());
+    if (getCookie('accessToken')) {
+      dispatch(getUserThunk());
+    }
   }, []);
 
   return (
@@ -43,18 +46,13 @@ const App = () => {
       <Routes>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ProtectedRoute />}>
+
+        <Route element={<ProtectedRoute />}>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
-        </Route>
-        <Route path='/reset-password' element={<ProtectedRoute />}>
           <Route path='/reset-password' element={<ResetPassword />} />
-        </Route>
-        <Route path='/profile' element={<ProtectedRoute />}>
           <Route path='/profile' element={<Profile />} />
-        </Route>
-        <Route path='/profile/orders' element={<ProtectedRoute />}>
           <Route path='/profile/orders' element={<ProfileOrders />} />
         </Route>
 
@@ -62,7 +60,12 @@ const App = () => {
         <Route
           path='/feed/:number'
           element={
-            <Modal title={''} onClose={() => {}}>
+            <Modal
+              title={''}
+              onClose={() => {
+                navigate(-1);
+              }}
+            >
               <OrderInfo />
             </Modal>
           }

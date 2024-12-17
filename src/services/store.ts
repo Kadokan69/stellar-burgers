@@ -10,12 +10,16 @@ import ingredientsSlice from '../features/ingredient/ingredientsSlice';
 import feedSlice from '../features/feed/feedSlice';
 import constructorBurgerSlice from '../features/constructor/constructorBurgerSlice';
 import userSlice from '../features/user/userSlice';
+import loginUserSlice from '../features/user/loginUserSlice';
+import orderSlice from '../features/order/orderSlice';
 
 const rootReducer = combineReducers({
   ingredients: ingredientsSlice,
   feed: feedSlice,
   getConstructorBurger: constructorBurgerSlice,
-  user: userSlice
+  user: userSlice,
+  userLogin: loginUserSlice,
+  orderData: orderSlice
 }); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
