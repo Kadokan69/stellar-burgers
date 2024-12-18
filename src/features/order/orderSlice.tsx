@@ -24,6 +24,7 @@ type TNewOrderResponse = {
   orderModalData: TOrder | null;
   orders: TOrder[];
   orderItem: TOrder[];
+  orderItemLoading: boolean;
 };
 
 const initialState: TNewOrderResponse = {
@@ -32,7 +33,8 @@ const initialState: TNewOrderResponse = {
   orderRequest: false,
   orderModalData: null,
   orders: [],
-  orderItem: []
+  orderItem: [],
+  orderItemLoading: false
 };
 
 export const userSlice = createSlice({
@@ -52,23 +54,20 @@ export const userSlice = createSlice({
       state.name = action.payload.name;
       state.orderRequest = false;
     });
-    builder.addCase(getOrdersThunk.pending, (state) => {
-      console.log('Загрузка...');
-    });
-    builder.addCase(getOrdersThunk.rejected, (state) => {
-      console.log('Ошибка');
-    });
+    builder.addCase(getOrdersThunk.pending, (state) => {});
+    builder.addCase(getOrdersThunk.rejected, (state) => {});
     builder.addCase(getOrdersThunk.fulfilled, (state, action) => {
       state.orders = action.payload;
     });
     builder.addCase(getOrderByNumberThunk.pending, (state) => {
-      console.log('Загрузка...');
+      state.orderItemLoading = false;
     });
     builder.addCase(getOrderByNumberThunk.rejected, (state) => {
-      console.log('Ошибка');
+      state.orderItemLoading = false;
     });
     builder.addCase(getOrderByNumberThunk.fulfilled, (state, action) => {
       state.orderItem = action.payload.orders;
+      state.orderItemLoading = true;
     });
   }
 });

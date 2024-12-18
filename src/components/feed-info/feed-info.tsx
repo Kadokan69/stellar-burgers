@@ -14,7 +14,6 @@ export const FeedInfo: FC = () => {
   /** TODO: взять переменные из стора */
   const orders: TOrder[] = useSelector((state) => state.feed.order);
   const feed = useSelector((state) => state.feed);
-  console.log(feed);
   const readyOrders = getOrders(orders, 'done');
 
   const pendingOrders = getOrders(orders, 'pending');

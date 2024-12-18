@@ -3,10 +3,7 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store';
-import {
-  getOrderByNumberThunk,
-  orderThunk
-} from '../../features/order/orderSlice';
+import { getOrderByNumberThunk } from '../../features/order/orderSlice';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
@@ -17,6 +14,7 @@ export const OrderInfo: FC = () => {
     dispatch(getOrderByNumberThunk(id));
   }, [dispatch]);
   /** TODO: взять переменные orderData и ingredients из стора */
+  const pandingOrder = useSelector((state) => state.orderData.orderItemLoading);
   const orderData = useSelector((state) => state.orderData.orderItem[0]);
 
   const ingredients: TIngredient[] = useSelector(
@@ -62,7 +60,7 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
+  if (!orderInfo || !pandingOrder) {
     return <Preloader />;
   }
 

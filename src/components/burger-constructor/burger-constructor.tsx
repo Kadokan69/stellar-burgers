@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { orderThunk } from '../../features/order/orderSlice';
 
 export const BurgerConstructor: FC = () => {
@@ -13,14 +13,14 @@ export const BurgerConstructor: FC = () => {
     (state) => state.getConstructorBurger.burgerConstructor
   );
 
-  const auth = localStorage.getItem('accessToken');
+  const { isAuthenticated } = useSelector((state) => state.user);
 
-  const orderRequest = useSelector((state) => state.orderData.orderRequest);
+  const { orderRequest } = useSelector((state) => state.orderData);
 
   const orderModalData = useSelector((state) => state.orderData.order);
 
   const onOrderClick = () => {
-    if (!auth) return navigate('/login', { replace: true });
+    if (!isAuthenticated) return navigate('/login', { replace: true });
     if (constructorItems.bun && constructorItems.ingredients) {
       dispath(
         orderThunk(

@@ -1,8 +1,6 @@
 import {
   registerUserApi,
   loginUserApi,
-  forgotPasswordApi,
-  resetPasswordApi,
   getUserApi,
   updateUserApi,
   logoutApi,
@@ -18,14 +16,10 @@ export const registerUserThunk = createAsyncThunk(
   async (user: TRegisterData) => registerUserApi(user)
 );
 
-// export const loginUserThunk = createAsyncThunk(
-//   'user/loginUserThunk',
-//   async (user: TLoginData) =>
-//     loginUserApi(user).then((res) => {
-//       setCookie('accessToken', res.accessToken);
-//       localStorage.setItem('refreshToken', res.refreshToken);
-//     })
-// );
+export const loginUserThunk = createAsyncThunk(
+  'user/loginUserThunk',
+  async (user: TLoginData) => loginUserApi(user)
+);
 
 export const getUserThunk = createAsyncThunk('user/getUserThunk', async () =>
   getUserApi()
@@ -44,70 +38,84 @@ export const logoutUserThunk = createAsyncThunk(
       })
 );
 
-export interface UserState {
-  isInit: boolean;
-  isLoading: boolean;
+type TUserState = {
   user: TUser;
-  error: string | null;
-  userLogin: boolean;
-}
+  isAuthChecked: boolean;
+  isAuthenticated: boolean;
+  loginUserError: string | undefined;
+  loginUserRequest: boolean;
+};
 
-const initialState: UserState = {
-  isInit: false,
-  isLoading: false,
+const initialState: TUserState = {
   user: {
     email: '',
     name: ''
   },
-  error: null,
-  userLogin: false
+  isAuthChecked: false,
+  isAuthenticated: false,
+  loginUserError: '',
+  loginUserRequest: false
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    init: (state) => {
-      state.isInit = true;
-    },
-    userLogout: (state) => {
-      state.user = {
-        email: '',
-        name: ''
-      };
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(loginUserThunk.pending, (state) => {
+      state.loginUserRequest = true;
+      state.isAuthChecked = true;
+      state.loginUserError = '';
+    });
+    builder.addCase(loginUserThunk.rejected, (state) => {
+      state.loginUserRequest = false;
+      state.loginUserError =
+        'Указан неверный адрес электронной почты или пароль';
+      state.isAuthChecked = true;
+      state.isAuthenticated = false;
+    });
+    builder.addCase(loginUserThunk.fulfilled, (state, { payload }) => {
+      setCookie('accessToken', payload.accessToken);
+      localStorage.setItem('refreshToken', payload.refreshToken);
+      state.user = payload.user;
+      state.loginUserError = '';
+      state.loginUserRequest = false;
+      state.isAuthChecked = true;
+      state.isAuthenticated = true;
+    });
     builder.addCase(registerUserThunk.pending, (state) => {
-      state.isLoading = true;
+      state.isAuthChecked = true;
     });
     builder.addCase(registerUserThunk.rejected, (state) => {
-      state.isInit = true;
-      state.isLoading = false;
+      state.isAuthChecked = true;
+      state.isAuthenticated = false;
     });
     builder.addCase(registerUserThunk.fulfilled, (state, { payload }) => {
-      state.isInit = true;
-      state.isLoading = false;
+      state.isAuthChecked = true;
+      state.isAuthenticated = true;
       state.user = payload.user;
       setCookie('accessToken', payload.accessToken);
       localStorage.setItem('refreshToken', payload.refreshToken);
     });
     builder.addCase(getUserThunk.pending, (state) => {
-      state.isLoading = true;
+      state.isAuthChecked = false;
     });
     builder.addCase(getUserThunk.rejected, (state) => {
-      state.isInit = true;
-      state.isLoading = false;
+      state.isAuthChecked = true;
+      state.isAuthenticated = false;
     });
     builder.addCase(getUserThunk.fulfilled, (state, { payload }) => {
-      state.isInit = true;
-      state.isLoading = false;
+      state.isAuthChecked = true;
+      state.isAuthenticated = true;
       state.user = payload.user;
-      state.userLogin = true;
+    });
+    builder.addCase(logoutUserThunk.fulfilled, (state) => {
+      state.user = { email: '', name: '' };
+      localStorage.clear();
+      deleteCookie('accessToken');
+      state.isAuthenticated = false;
     });
   }
 });
-
-export const { init, userLogout } = userSlice.actions;
 
 export default userSlice.reducer;

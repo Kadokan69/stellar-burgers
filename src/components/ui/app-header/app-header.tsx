@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
 import {
@@ -14,28 +14,46 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
     <nav className={`${styles.menu} p-4`}>
       <div className={styles.menu_part_left}>
         <>
-          <BurgerIcon type={'primary'} />
-          <Link to='/' className='text text_type_main-default ml-2 mr-10'>
-            Конструктор
-          </Link>
+          <NavLink
+            to='/'
+            className={({ isActive }) =>
+              isActive ? `${styles.link} ${styles.link_active}` : styles.link
+            }
+          >
+            <BurgerIcon type={'primary'} />
+            <p className='text text_type_main-default ml-2'>Конструктор</p>
+          </NavLink>
         </>
         <>
-          <ListIcon type={'primary'} />
-          <Link to='/feed'>
+          <NavLink
+            to='/feed'
+            className={({ isActive }) =>
+              isActive ? `${styles.link} ${styles.link_active}` : styles.link
+            }
+          >
+            <ListIcon type={'primary'} />
             <p className='text text_type_main-default ml-2'>Лента заказов</p>
-          </Link>
+          </NavLink>
         </>
       </div>
       <div className={styles.logo}>
-        <Link to='/'>
+        <NavLink to='/'>
           <Logo className='' />
-        </Link>
+        </NavLink>
       </div>
       <div className={styles.link_position_last}>
-        <ProfileIcon type={'primary'} />
-        <Link to='/profile' className='text text_type_main-default ml-2'>
-          {userName || 'Личный кабинет'}
-        </Link>
+        <NavLink
+          to='/profile'
+          className={({ isActive }) =>
+            isActive ? `${styles.link} ${styles.link_active}` : styles.link
+          }
+        >
+          <ProfileIcon type={'primary'} />
+          <p className='text text_type_main-default ml-2'>
+            {' '}
+            {userName || 'Личный кабинет'}
+          </p>
+        </NavLink>
       </div>
     </nav>
   </header>
