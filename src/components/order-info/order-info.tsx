@@ -15,10 +15,7 @@ export const OrderInfo: FC = () => {
   }, [dispatch]);
   /** TODO: взять переменные orderData и ingredients из стора */
   const pandingOrder = useSelector((state) => state.orderData.orderRequest);
-  const orderData = useSelector((state) =>
-    state.orderData.orderProfile.find((item) => item._id === params.number)
-  );
-
+  const orderData = useSelector((state) => state.orderData.orderProfile[0]);
   const ingredients: TIngredient[] = useSelector(
     (state) => state.ingredients.ingredients
   );

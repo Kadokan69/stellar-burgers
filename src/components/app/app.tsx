@@ -88,7 +88,7 @@ const App = () => {
           element={
             <>
               <h3 className={`${styles.title} text text_type_digits-default`}>
-                #{feedOrderID}
+                #{profileOrderID}
               </h3>
               <OrderInfo />{' '}
             </>

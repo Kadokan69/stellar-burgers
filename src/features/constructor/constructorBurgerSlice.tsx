@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TOrder, TOrdersData } from '@utils-types';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 type TConstructorBurger = {
   isLoading: boolean;
@@ -23,14 +23,19 @@ const constructorBurgerSlice = createSlice({
   name: 'constructorBurger',
   initialState,
   reducers: {
-    addIngredient: (state, action) => {
-      if (action.payload.type === 'bun') {
-        state.burgerConstructor.bun = action.payload;
-      } else {
-        state.burgerConstructor.ingredients.push({
-          ...action.payload
-        });
-      }
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.burgerConstructor.bun = action.payload;
+        } else {
+          state.burgerConstructor.ingredients.push({
+            ...action.payload
+          });
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: nanoid() }
+      })
     },
     removeIngredient: (state, action) => {
       state.burgerConstructor.ingredients.splice(action.payload, 1);
