@@ -14,8 +14,10 @@ export const OrderInfo: FC = () => {
     dispatch(getOrderByNumberThunk(id));
   }, [dispatch]);
   /** TODO: взять переменные orderData и ingredients из стора */
-  const pandingOrder = useSelector((state) => state.orderData.orderItemLoading);
-  const orderData = useSelector((state) => state.orderData.orderItem[0]);
+  const pandingOrder = useSelector((state) => state.orderData.orderRequest);
+  const orderData = useSelector((state) =>
+    state.orderData.orderProfile.find((item) => item._id === params.number)
+  );
 
   const ingredients: TIngredient[] = useSelector(
     (state) => state.ingredients.ingredients
@@ -60,7 +62,7 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo || !pandingOrder) {
+  if (!orderInfo || pandingOrder) {
     return <Preloader />;
   }
 

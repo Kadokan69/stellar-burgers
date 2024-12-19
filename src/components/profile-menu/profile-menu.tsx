@@ -10,7 +10,9 @@ export const ProfileMenu: FC = () => {
   const { pathname } = useLocation();
 
   const handleLogout = () => {
-    dispath(logoutUserThunk()).then(() => navigate('/', { replace: true }));
+    dispath(logoutUserThunk()).then(() =>
+      navigate('/login', { replace: true })
+    );
   };
 
   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;

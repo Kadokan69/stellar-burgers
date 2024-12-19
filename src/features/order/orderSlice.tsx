@@ -18,58 +18,64 @@ export const getOrderByNumberThunk = createAsyncThunk(
 );
 
 type TNewOrderResponse = {
-  order: TOrder | null;
   name: string | null;
   orderRequest: boolean;
   orderModalData: TOrder | null;
   orders: TOrder[];
-  orderItem: TOrder[];
-  orderItemLoading: boolean;
+  orderProfile: TOrder[];
 };
 
 const initialState: TNewOrderResponse = {
-  order: null,
   name: null,
   orderRequest: false,
   orderModalData: null,
   orders: [],
-  orderItem: [],
-  orderItemLoading: false
+  orderProfile: []
 };
 
 export const userSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrder: (state) => {
+      state.orderModalData = null;
+      state.orderRequest = false;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(orderThunk.pending, (state) => {
-      console.log('Загрузка...');
       state.orderRequest = true;
     });
     builder.addCase(orderThunk.rejected, (state) => {
-      console.log('Ошибка');
+      state.orderRequest = false;
     });
     builder.addCase(orderThunk.fulfilled, (state, action) => {
-      state.order = action.payload.order;
+      state.orderModalData = action.payload.order;
       state.name = action.payload.name;
       state.orderRequest = false;
     });
-    builder.addCase(getOrdersThunk.pending, (state) => {});
-    builder.addCase(getOrdersThunk.rejected, (state) => {});
+    builder.addCase(getOrdersThunk.pending, (state) => {
+      state.orderRequest = true;
+    });
+    builder.addCase(getOrdersThunk.rejected, (state) => {
+      state.orderRequest = false;
+    });
     builder.addCase(getOrdersThunk.fulfilled, (state, action) => {
       state.orders = action.payload;
+      state.orderRequest = false;
     });
     builder.addCase(getOrderByNumberThunk.pending, (state) => {
-      state.orderItemLoading = false;
+      state.orderRequest = true;
     });
     builder.addCase(getOrderByNumberThunk.rejected, (state) => {
-      state.orderItemLoading = false;
+      state.orderRequest = false;
     });
     builder.addCase(getOrderByNumberThunk.fulfilled, (state, action) => {
-      state.orderItem = action.payload.orders;
-      state.orderItemLoading = true;
+      state.orderProfile = action.payload.orders;
+      state.orderRequest = false;
     });
   }
 });
 
+export const { resetOrder } = userSlice.actions;
 export default userSlice.reducer;

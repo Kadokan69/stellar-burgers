@@ -8,17 +8,13 @@ export const fetchIngredientsData = createAsyncThunk(
 );
 
 interface IIngredients {
-  isInit: boolean;
   isLoading: boolean;
   ingredients: TIngredient[];
-  error: string | undefined | null;
 }
 
 const initialState: IIngredients = {
-  isInit: false,
   isLoading: false,
-  ingredients: [],
-  error: null
+  ingredients: []
 };
 
 const ingredientsSlice = createSlice({
@@ -29,15 +25,13 @@ const ingredientsSlice = createSlice({
     builder
       .addCase(fetchIngredientsData.pending, (state) => {
         state.isLoading = false;
-        state.error = null;
+      })
+      .addCase(fetchIngredientsData.rejected, (state) => {
+        state.isLoading = false;
       })
       .addCase(fetchIngredientsData.fulfilled, (state, action) => {
         state.isLoading = true;
         state.ingredients = action.payload;
-      })
-      .addCase(fetchIngredientsData.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
       });
   }
 });

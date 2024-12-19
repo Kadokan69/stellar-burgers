@@ -24,19 +24,19 @@ import {
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { fetchIngredientsData } from '../../features/ingredient/ingredientsSlice';
-import { fetchFeedData } from '../../features/feed/feedSlice';
 import { getUserThunk } from '../../features/user/userSlice';
 
 const App = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const orderID = useMatch('/feed/:number')?.params?.number;
+  const feedOrderID = useMatch('/feed/:number')?.params?.number;
+  const profileOrderID = useMatch('/profile/orders/:number')?.params?.number;
   const backgroundLocation = location.state?.background;
 
   useEffect(() => {
     dispatch(fetchIngredientsData());
-    dispatch(fetchFeedData());
+
     dispatch(getUserThunk());
   }, [dispatch]);
 
@@ -60,9 +60,40 @@ const App = () => {
 
         <Route path='*' element={<NotFound404 />} />
 
-        <Route path='/feed/:number' element={<OrderInfo />} />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
+        <Route
+          path='/feed/:number'
+          element={
+            <>
+              <h3 className={`${styles.title} text text_type_digits-default`}>
+                #{feedOrderID}
+              </h3>
+              <OrderInfo />
+            </>
+          }
+        />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <>
+              <h3 className={`${styles.title} text text_type_main-large`}>
+                Детали ингредиента
+              </h3>
+
+              <IngredientDetails />
+            </>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <>
+              <h3 className={`${styles.title} text text_type_digits-default`}>
+                #{feedOrderID}
+              </h3>
+              <OrderInfo />{' '}
+            </>
+          }
+        />
       </Routes>
       {backgroundLocation && (
         <Routes>
@@ -70,7 +101,7 @@ const App = () => {
             path='/feed/:number'
             element={
               <Modal
-                title={`#${orderID}`}
+                title={`#${feedOrderID}`}
                 onClose={() => {
                   navigate(-1);
                 }}
@@ -96,7 +127,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <Modal
-                title={`#${orderID}`}
+                title={`#${profileOrderID}`}
                 onClose={() => {
                   navigate(-1);
                 }}

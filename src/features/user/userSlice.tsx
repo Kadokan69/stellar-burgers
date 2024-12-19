@@ -25,6 +25,11 @@ export const getUserThunk = createAsyncThunk('user/getUserThunk', async () =>
   getUserApi()
 );
 
+export const updateUserThunk = createAsyncThunk(
+  'user/updateUserThunk',
+  async (user: TRegisterData) => updateUserApi(user)
+);
+
 export const logoutUserThunk = createAsyncThunk(
   'user/logoutUserThunk',
   async () =>
@@ -105,6 +110,13 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
     });
     builder.addCase(getUserThunk.fulfilled, (state, { payload }) => {
+      state.isAuthChecked = true;
+      state.isAuthenticated = true;
+      state.user = payload.user;
+    });
+    builder.addCase(updateUserThunk.pending, (state) => {});
+    builder.addCase(updateUserThunk.rejected, (state) => {});
+    builder.addCase(updateUserThunk.fulfilled, (state, { payload }) => {
       state.isAuthChecked = true;
       state.isAuthenticated = true;
       state.user = payload.user;

@@ -6,25 +6,21 @@ export const fetchFeedData = createAsyncThunk('feed/fetchFeedData', async () =>
   getFeedsApi()
 );
 
-interface IFeed {
-  isInit: boolean;
+type IFeed = {
   isLoading: boolean;
   feed: TOrdersData;
-  error: string | null;
   order: TOrder[];
   total: number;
   totalToday: number;
-}
+};
 
 const initialState: IFeed = {
-  isInit: false,
   isLoading: false,
   feed: {
     orders: [],
     total: 0,
     totalToday: 0
   },
-  error: null,
   order: [],
   total: 0,
   totalToday: 0
@@ -38,7 +34,9 @@ const feedSlice = createSlice({
     builder
       .addCase(fetchFeedData.pending, (state) => {
         state.isLoading = false;
-        state.error = null;
+      })
+      .addCase(fetchFeedData.rejected, (state, { payload }) => {
+        state.isLoading = false;
       })
       .addCase(fetchFeedData.fulfilled, (state, action) => {
         state.isLoading = true;
@@ -46,9 +44,6 @@ const feedSlice = createSlice({
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
         state.order = action.payload.orders;
-      })
-      .addCase(fetchFeedData.rejected, (state) => {
-        state.isLoading = false;
       });
   }
 });

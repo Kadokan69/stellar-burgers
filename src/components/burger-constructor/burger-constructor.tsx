@@ -2,8 +2,9 @@ import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { orderThunk } from '../../features/order/orderSlice';
+import { useNavigate } from 'react-router-dom';
+import { orderThunk, resetOrder } from '../../features/order/orderSlice';
+import { clearIngredient } from '../../features/constructor/constructorBurgerSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispath = useDispatch();
@@ -15,9 +16,9 @@ export const BurgerConstructor: FC = () => {
 
   const { isAuthenticated } = useSelector((state) => state.user);
 
-  const { orderRequest } = useSelector((state) => state.orderData);
-
-  const orderModalData = useSelector((state) => state.orderData.order);
+  const { orderRequest, orderModalData } = useSelector(
+    (state) => state.orderData
+  );
 
   const onOrderClick = () => {
     if (!isAuthenticated) return navigate('/login', { replace: true });
@@ -29,9 +30,12 @@ export const BurgerConstructor: FC = () => {
             .concat(constructorItems.bun._id, constructorItems.bun._id)
         )
       );
+      dispath(clearIngredient());
     }
   };
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    dispath(resetOrder());
+  };
 
   const price = useMemo(
     () =>

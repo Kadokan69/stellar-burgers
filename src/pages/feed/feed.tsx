@@ -9,9 +9,11 @@ export const Feed: FC = () => {
   /** TODO: взять переменную из стора */
   const orders: TOrder[] = useSelector((state) => state.feed.order);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchFeedData());
+  }, [dispatch]);
 
   if (!orders.length) {
-    console.log(orders);
     return <Preloader />;
   }
 
