@@ -6,7 +6,7 @@ import {
   logoutApi,
   TRegisterData,
   TLoginData
-} from '@api';
+} from '../../utils/burger-api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { deleteCookie, setCookie } from '../../utils/cookie';
@@ -114,8 +114,6 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
       state.user = payload.user;
     });
-    builder.addCase(updateUserThunk.pending, (state) => {});
-    builder.addCase(updateUserThunk.rejected, (state) => {});
     builder.addCase(updateUserThunk.fulfilled, (state, { payload }) => {
       state.isAuthChecked = true;
       state.isAuthenticated = true;

@@ -1,4 +1,4 @@
-import { getFeedsApi } from '@api';
+import { getFeedsApi } from '../../utils/burger-api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder, TOrdersData } from '@utils-types';
 
@@ -35,7 +35,7 @@ const feedSlice = createSlice({
       .addCase(fetchFeedData.pending, (state) => {
         state.isLoading = false;
       })
-      .addCase(fetchFeedData.rejected, (state, { payload }) => {
+      .addCase(fetchFeedData.rejected, (state) => {
         state.isLoading = false;
       })
       .addCase(fetchFeedData.fulfilled, (state, action) => {

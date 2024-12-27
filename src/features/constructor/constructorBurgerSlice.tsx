@@ -1,7 +1,7 @@
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
-type TConstructorBurger = {
+export type TConstructorBurger = {
   isLoading: boolean;
   burgerConstructor: {
     bun: TConstructorIngredient | null;

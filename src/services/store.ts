@@ -12,7 +12,7 @@ import constructorBurgerSlice from '../features/constructor/constructorBurgerSli
 import userSlice from '../features/user/userSlice';
 import orderSlice from '../features/order/orderSlice';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   ingredients: ingredientsSlice,
   feed: feedSlice,
   getConstructorBurger: constructorBurgerSlice,

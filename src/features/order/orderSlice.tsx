@@ -1,4 +1,8 @@
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import {
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi
+} from '../../utils/burger-api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
@@ -33,7 +37,7 @@ const initialState: TNewOrderResponse = {
   orderProfile: []
 };
 
-export const userSlice = createSlice({
+export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
@@ -77,5 +81,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { resetOrder } = userSlice.actions;
-export default userSlice.reducer;
+export const { resetOrder } = orderSlice.actions;
+export default orderSlice.reducer;
