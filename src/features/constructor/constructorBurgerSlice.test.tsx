@@ -3,19 +3,12 @@ import reducer, {
   removeIngredient,
   moveIngredientDown,
   moveIngredientUp,
+  initialState
 } from './constructorBurgerSlice';
 import { expect, test, describe } from '@jest/globals';
 
 
 describe('constructorBurgerSlice', () => {
-  const initialState = {
-    isLoading: false,
-    burgerConstructor: {
-      bun: null,
-      ingredients: []
-    },
-    error: null
-  };
 
   test('Добавление булки', () => {
     const bun = {

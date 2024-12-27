@@ -1,11 +1,7 @@
-import reducer, { fetchIngredientsData } from './ingredientsSlice';
+import reducer, { fetchIngredientsData, initialState } from './ingredientsSlice';
 import { expect, test, describe } from '@jest/globals';
 
 describe('ingredientsSlice reducer', () => {
-  const initialState = {
-    isLoading: false,
-    ingredients: []
-  };
 
   test('Проверка fetchIngredientsData.pending', () => {
     const action = { type: fetchIngredientsData.pending.type };

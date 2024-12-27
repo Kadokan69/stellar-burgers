@@ -10,7 +10,7 @@ export type TConstructorBurger = {
   error: string | null;
 };
 
-const initialState: TConstructorBurger = {
+export const initialState: TConstructorBurger = {
   isLoading: false,
   burgerConstructor: {
     bun: null,

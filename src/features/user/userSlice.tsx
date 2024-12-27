@@ -51,7 +51,7 @@ type TUserState = {
   loginUserRequest: boolean;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   user: {
     email: '',
     name: ''

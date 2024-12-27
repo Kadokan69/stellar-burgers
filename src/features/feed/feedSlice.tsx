@@ -14,7 +14,7 @@ type IFeed = {
   totalToday: number;
 };
 
-const initialState: IFeed = {
+export const initialState: IFeed = {
   isLoading: false,
   feed: {
     orders: [],

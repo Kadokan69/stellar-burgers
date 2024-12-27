@@ -2,18 +2,12 @@ import reducer, {
   resetOrder,
   orderThunk,
   getOrdersThunk,
-  getOrderByNumberThunk
+  getOrderByNumberThunk,
+  initialState
 } from './orderSlice';
 import { expect, test, describe } from '@jest/globals';
 
 describe('orderSlice', () => {
-  const initialState = {
-    name: null,
-    orderRequest: false,
-    orderModalData: null,
-    orders: [],
-    orderProfile: []
-  };
 
   test('Проверка orderThunk.pending', () => {
     const action = { type: orderThunk.pending.type };

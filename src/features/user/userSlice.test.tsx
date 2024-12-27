@@ -2,7 +2,8 @@ import reducer, {
   loginUserThunk,
   registerUserThunk,
   getUserThunk,
-  logoutUserThunk
+  logoutUserThunk,
+  initialState
 } from './userSlice';
 
 import { expect, test, describe } from '@jest/globals';
@@ -23,16 +24,6 @@ beforeEach(() => {
 });
 
 describe('userSlice', () => {
-  const initialState = {
-    user: {
-      email: '',
-      name: ''
-    },
-    isAuthChecked: false,
-    isAuthenticated: false,
-    loginUserError: '',
-    loginUserRequest: false
-  };
 
   describe('loginUserThunk', () => {
     test('Проверка loginUserThunk.pending', () => {

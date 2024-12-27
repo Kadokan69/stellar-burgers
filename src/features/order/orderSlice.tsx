@@ -29,7 +29,7 @@ type TNewOrderResponse = {
   orderProfile: TOrder[];
 };
 
-const initialState: TNewOrderResponse = {
+export const initialState: TNewOrderResponse = {
   name: null,
   orderRequest: false,
   orderModalData: null,

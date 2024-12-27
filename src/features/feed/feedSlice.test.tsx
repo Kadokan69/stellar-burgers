@@ -1,18 +1,7 @@
-import reducer, { fetchFeedData } from './feedSlice';
+import reducer, { fetchFeedData, initialState } from './feedSlice';
 import { expect, test, describe } from '@jest/globals';
 
 describe('feedSlice reducer', () => {
-  const initialState = {
-    isLoading: false,
-    feed: {
-      orders: [],
-      total: 0,
-      totalToday: 0
-    },
-    order: [],
-    total: 0,
-    totalToday: 0
-  };
 
   test('Проверка fetchFeedData.pending', () => {
     const action = { type: fetchFeedData.pending.type };
