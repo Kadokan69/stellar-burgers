@@ -1,22 +1,24 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { useDispatch, useSelector } from '../../services/store';
+import { getOrderByNumberThunk } from '../../features/order/orderSlice';
+import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
+  const dispatch = useDispatch();
+  const params = useParams<{ number: string }>();
+  const id = Number(params.number);
+  useEffect(() => {
+    dispatch(getOrderByNumberThunk(id));
+  }, [dispatch]);
   /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
-
-  const ingredients: TIngredient[] = [];
-
+  const pandingOrder = useSelector((state) => state.orderData.orderRequest);
+  const orderData = useSelector((state) => state.orderData.orderProfile[0]);
+  const ingredients: TIngredient[] = useSelector(
+    (state) => state.ingredients.ingredients
+  );
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
@@ -40,12 +42,10 @@ export const OrderInfo: FC = () => {
         } else {
           acc[item].count++;
         }
-
         return acc;
       },
       {}
     );
-
     const total = Object.values(ingredientsInfo).reduce(
       (acc, item) => acc + item.price * item.count,
       0
@@ -59,7 +59,7 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
+  if (!orderInfo || pandingOrder) {
     return <Preloader />;
   }
 
